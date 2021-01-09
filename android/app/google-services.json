@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491642716350",
+    "project_id": "fir-testthomasdemont",
+    "storage_bucket": "fir-testthomasdemont.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491642716350:android:7875dd951a404abe04deef",
+        "android_client_info": {
+          "package_name": "com.example.testfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491642716350-msqbps13f3gkfjqdcen9f5c36loro1t1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy6j1sdp2O2npxQ_2QOLnORA5XFJS19MA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491642716350-msqbps13f3gkfjqdcen9f5c36loro1t1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
