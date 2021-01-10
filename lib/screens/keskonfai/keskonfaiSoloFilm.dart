@@ -27,7 +27,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
   int indexFilm = 0;
   int _indexBottomNavBar = 0;
   Film filmActuel;
-  List<Widget> listMovieCard;
+  List<MovieCard> listMovieCard;
   // final FirebaseUser user = await authentication.currentUser();
   // final userUid = user.uid;
 
@@ -82,7 +82,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
                         index: indexFilm,
                         children: listMovieCard = snapshot.data.documents
                             .map((DocumentSnapshot document) {
-                              print('index : ${indexFilm}');
+                              print('indexFilm : ${indexFilm}');
                           return new MovieCard(
                             film: filmActuel= Film(
                               idFilm: int.parse(document.documentID),
@@ -131,6 +131,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
     setState(() {
       _indexBottomNavBar = index;
     });
+    print('index bottom bar : ${_indexBottomNavBar}');
     switch (_indexBottomNavBar) {
       case 0: //TODO Passer le film en dislike + save dernier film
         print('Case 1 ');
@@ -140,20 +141,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
       case 1:
         print('Case 2 ');
         showModalBottomSheet(context: context, builder: (context) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-            child: MovieInfo(film: Film(
-              idFilm: filmActuel.idFilm,
-              titreFilm: filmActuel.titreFilm,
-              synopsis: filmActuel.synopsis,
-              realisateur: filmActuel.realisateur,
-              typeFilm: filmActuel.typeFilm,
-              casting: filmActuel.casting,
-              anneeSortie: filmActuel.anneeSortie,
-              rating: filmActuel.rating,
-              duree: filmActuel.duree,
-            )),
-          );
+          return listMovieCard[indexFilm].afficherInfo(context);
         });
         break;
       case 2: //TODO Passer le film en like + save dernier film

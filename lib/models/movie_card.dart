@@ -25,24 +25,17 @@ class MovieCard extends StatelessWidget {
       ),
     );
   }
-}
 
-class MovieInfo extends StatelessWidget {
-  final Film film;
-
-  MovieInfo({this.film});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget afficherInfo(BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
-          Text('${film.titreFilm}'),
-          Text('${film.synopsis}'),
-          Text('realisateur: ${film.realisateur}'),
-          Text('casting: ${film.casting}'),
-          Text('duree: ${film.duree}'),
-        ],
+        Text('${film.titreFilm}'),
+        Text('${film.synopsis}'),
+        Text('realisateur: ${film.realisateur}'),
+        Text('casting: ${film.casting}'),
+        Text('duree: ${film.duree}'),
+      ],
       ),
     );
   }

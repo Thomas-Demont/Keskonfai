@@ -157,7 +157,7 @@ class _RegisterState extends State<Register> {
                             email: email,
                             password: passWord)
                             .then((currentUser) => Firestore.instance
-                            .collection("users")
+                            .collection("Users")
                             .document(currentUser.user.uid)
                             .setData({
                           'email': email,
