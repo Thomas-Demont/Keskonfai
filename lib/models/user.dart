@@ -2,7 +2,7 @@ class User {
 
   final String uid;
   final String name;
-  final DateTime dateOfBirth;
+final DateTime dateOfBirth;
   final String gender;
   final int dernierFilm;
 

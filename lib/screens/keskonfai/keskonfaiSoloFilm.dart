@@ -28,6 +28,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
   int _indexBottomNavBar = 0;
   Film filmActuel;
   List<MovieCard> listMovieCard;
+  String currentUserUid;
   // final FirebaseUser user = await authentication.currentUser();
   // final userUid = user.uid;
 
@@ -127,16 +128,18 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
     );
   }
 
-  void onItemTap(int index) {
+  void onItemTap(int index) async{
     setState(() {
       _indexBottomNavBar = index;
     });
     print('index bottom bar : ${_indexBottomNavBar}');
     switch (_indexBottomNavBar) {
-      case 0: //TODO Passer le film en dislike + save dernier film
+      case 0: //TODO Passer le film en dislike
         print('Case 1 ');
+        getCurrentUserUid();
+        await Future.delayed(const Duration(milliseconds: 300), (){});//Pause pendant 300milisecondes pour attendre le currentUserId
+        setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
         indexFilm += 1;
-        // currentUser.user.useruid
         break;
       case 1:
         print('Case 2 ');
@@ -144,10 +147,36 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
           return listMovieCard[indexFilm].afficherInfo(context);
         });
         break;
-      case 2: //TODO Passer le film en like + save dernier film
+      case 2: //TODO Passer le film en like
         print('Case 3 ');
+        getCurrentUserUid();
+        await Future.delayed(const Duration(milliseconds: 300), (){});//Pause pendant 300milisecondes pour attendre le currentUserId
+        setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
         indexFilm += 1;
         break;
     }
   }
+
+  Future<String> getCurrentUserUid() async {
+    final FirebaseUser user = await authentication.currentUser();
+    print('getCurrentUserId() : $currentUserUid');
+    return currentUserUid = user.uid;
+  }
+
+  void getDataFromCollection(String collection, String idUser, String nomChamp) {
+    Firestore.instance.collection(collection).document(idUser)
+        .get().then((documentSnapshot) {
+      print('id getDataFromCollection : $idUser');
+      print(documentSnapshot.data);
+      print(documentSnapshot.data[nomChamp].toString()); // (Remplacer par un return)
+
+    }
+    );
+  }
+
+  void setDernierFilm(int idFilm, int indexUpdate) async{
+    Firestore.instance.collection('Users').document(currentUserUid).updateData(
+        {'dernierFilm': indexUpdate});
+  }
+
 }
