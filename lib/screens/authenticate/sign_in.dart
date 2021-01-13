@@ -23,15 +23,15 @@ class SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
+      backgroundColor: Colors.deepOrange[300],
       appBar: AppBar(
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.deepOrange[600],
         elevation: 0.0,
-        title: Text('Sign In'),
+        title: Text('Connexion'),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Register'),
+            label: Text('Inscription'),
             onPressed: () {
               widget.toggleView();
             },
@@ -61,7 +61,7 @@ class SignInState extends State<SignIn> {
               SizedBox(height: 20.0),
               TextFormField(//Password
                 decoration: InputDecoration(
-                  hintText: 'password',
+                  hintText: 'Mot de passe',
                   fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 2.0)
@@ -77,14 +77,14 @@ class SignInState extends State<SignIn> {
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text(
-                  'Sign in',
+                  'Valider',
                   style: TextStyle(color: Colors.white),
               ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
                     dynamic result = _auth.signInWithEmailAndPassword(email, passWord);
                     if(result == null) {
-                      setState(() => error = 'Could not sign in with those credentials');
+                      setState(() => error = 'Impossible de se connecter avec ces identifiants');
                     }
                   }
                 }

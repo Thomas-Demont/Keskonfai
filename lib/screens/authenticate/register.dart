@@ -15,8 +15,11 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final databaseReference = Firestore.instance;
 
+
+  //text field state
   String email = '';
   String passWord = '';
+  String prenom ='';
   String name ='';
   String dropdownValueAge = "16-25";
   String dropdownValueGender = "Femme";
@@ -27,22 +30,22 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Colors.deepOrange[300],
       appBar: AppBar(
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.deepOrange[600],
         elevation: 0.0,
-        title: Text('Sign up'),
+        title: Text('Inscription'),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Sign In'),
+            label: Text('Connexion'),
             onPressed: () {
               widget.toggleView();
             },
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
           child: Form(
             key: _formKey,
@@ -65,7 +68,7 @@ class _RegisterState extends State<Register> {
                 SizedBox(height: 20.0),
                 TextFormField(//Password
                   decoration: InputDecoration(
-                      hintText: 'password',
+                      hintText: 'Mot de passe',
                       fillColor: Colors.white,
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white, width: 2.0)
@@ -80,7 +83,7 @@ class _RegisterState extends State<Register> {
                 SizedBox(height: 20.0),
                 TextFormField(//name
                   decoration: InputDecoration(
-                      hintText: 'name',
+                      hintText: 'Nom',
                       fillColor: Colors.white,
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white, width: 2.0)
@@ -88,6 +91,19 @@ class _RegisterState extends State<Register> {
                   ),
                   onChanged: (val) {
                     setState(() => name = val);
+                  },
+                ),
+                SizedBox(height: 20.0),
+                TextFormField(//prenom
+                  decoration: InputDecoration(
+                      hintText: 'Prenom',
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0)
+                      )
+                  ),
+                  onChanged: (val) {
+                    setState(() => prenom = val);
                   },
                 ),
                 SizedBox(height: 20.0),
@@ -121,7 +137,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Age',
+                    labelText: 'Sexe',
                   ),
                   value: dropdownValueGender,
                   icon: Icon(Icons.arrow_downward),
@@ -145,7 +161,7 @@ class _RegisterState extends State<Register> {
                 RaisedButton(
                     color: Colors.pink[400],
                     child: Text(
-                      'Register',
+                      'Valider',
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () async {
@@ -160,9 +176,11 @@ class _RegisterState extends State<Register> {
                             .setData({
                           'email': email,
                           'nom': name,
+                          'prenom': prenom,
                           'age': dropdownValueAge,
                           'gender': dropdownValueGender,
                         }));
+                        print(FirebaseAuth.instance.currentUser());
                         }
                       }
                 ),

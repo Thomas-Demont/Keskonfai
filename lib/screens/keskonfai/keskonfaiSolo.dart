@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:testfirebase/screens/home/settings_form.dart';
+import 'package:testfirebase/screens/Profile/Profile.dart';
 import 'package:testfirebase/screens/keskonfai/keskonfaiSoloFilm.dart';
+import 'package:testfirebase/services/auth.dart';
 import 'package:testfirebase/services/auth.dart';
 import 'package:testfirebase/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:testfirebase/models/user.dart';
+import 'package:testfirebase/screens/keskonfai/keskonfaiSolo.dart';
 
 class KeskonfaiSolo extends StatelessWidget {
 
@@ -14,34 +16,30 @@ class KeskonfaiSolo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    void _showSettingsPanel() {
-      showModalBottomSheet(context: context, builder: (context) {
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-          child: SettingsForm(),
-        );
-      });
-    }
-
     return StreamProvider<List<User>>.value(
       value: DatabaseService().users,
       child: Scaffold(
-        backgroundColor: Colors.brown[50],
+        backgroundColor: Colors.deepOrange[300],
         appBar: AppBar(
-          title: Text('Home'),
-          backgroundColor: Colors.brown[400],
+          title: Text('Activités'),
+          backgroundColor: Colors.deepOrange[600],
           elevation: 0.0,
           actions: <Widget>[
             FlatButton.icon(
-                icon: Icon(Icons.person),
-                label: Text('Logout'),
+                icon: Icon(Icons.exit_to_app),
+                label: Text('Déconnexion'),
                 onPressed: () async {
                   await _auth.signOut();
                 }),
             FlatButton.icon(
-              icon: Icon(Icons.settings),
-              label: Text('Settings'),
-              onPressed: () => _showSettingsPanel(),
+              icon: Icon(Icons.person),
+              label: Text('Profil'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Profile()),
+                  );
+                }
             ),
           ],
         ),
@@ -62,7 +60,7 @@ class KeskonfaiSolo extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               RaisedButton(//Bouton Séries
-                color: Colors.pinkAccent,
+                color: Colors.blueGrey,
                 child: Text('Séries'),
                 onPressed: () {
 
@@ -70,7 +68,7 @@ class KeskonfaiSolo extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               RaisedButton(//Bouton Sport
-                color: Colors.pinkAccent,
+                color: Colors.blueGrey,
                 child: Text('Sport'),
                 onPressed: () {//TODO Fonctionnement groupe
                   //Navigator.push(
@@ -82,7 +80,7 @@ class KeskonfaiSolo extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               RaisedButton(//Bouton Nourriture
-                color: Colors.pinkAccent,
+                color: Colors.blueGrey,
                 child: Text('Nourriture'),
                 onPressed: () {//TODO Fonctionnement groupe
                   //Navigator.push(
@@ -94,7 +92,7 @@ class KeskonfaiSolo extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               RaisedButton(//Bouton Jeux Video
-                color: Colors.pinkAccent,
+                color: Colors.blueGrey,
                 child: Text('Jeux Video'),
                 onPressed: () {//TODO Fonctionnement groupe
                   //Navigator.push(

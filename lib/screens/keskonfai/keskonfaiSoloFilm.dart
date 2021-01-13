@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testfirebase/screens/home/settings_form.dart';
+import 'package:testfirebase/screens/Profile/Profile.dart';
+import 'package:testfirebase/services/auth.dart';
 import 'package:testfirebase/services/auth.dart';
 import 'package:testfirebase/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:testfirebase/models/user.dart';
+import 'package:testfirebase/screens/keskonfai/keskonfaiSolo.dart';
 import '../../models/film.dart';
 import '../../models/movie_card.dart';
 
@@ -20,7 +22,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
 
   final AuthService _auth = AuthService();
   final FirebaseAuth authentication = FirebaseAuth.instance;
-  int indexFilm = 0;//int.parse(getDataFromCollection('Users', currentUserUid, 'dernierFilm'));
+  int indexFilm = 0;
   int _indexBottomNavBar = 0;
   Film filmActuel;
   List<MovieCard> listMovieCard;
@@ -30,39 +32,35 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
 
   @override
   Widget build(BuildContext context) {
-    getCurrentUserUid();
-    void _showSettingsPanel() {
-      showModalBottomSheet(context: context, builder: (context) {
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-          child: SettingsForm(),
-        );
-      });
-    }
 
     return StreamProvider<List<User>>.value(
       value: DatabaseService().users,
       child: Scaffold(
-          backgroundColor: Colors.brown[50],
+          backgroundColor: Colors.deepOrange[300],
           appBar: AppBar(
-            title: Text('Home'),
-            backgroundColor: Colors.brown[400],
+            title: Text('Films'),
+            backgroundColor: Colors.deepOrange[600],
             elevation: 0.0,
             actions: <Widget>[
               FlatButton.icon(
-                  icon: Icon(Icons.person),
-                  label: Text('Logout'),
+                  icon: Icon(Icons.exit_to_app),
+                  label: Text('Déconnexion'),
                   onPressed: () async {
                     await _auth.signOut();
                   }),
               FlatButton.icon(
-                icon: Icon(Icons.settings),
-                label: Text('Settings'),
-                onPressed: () => _showSettingsPanel(),
+                icon: Icon(Icons.person),
+                label: Text('Profil'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Profile()),
+                  );
+                }
               ),
             ],
           ),
-          body: Container(
+          body: SingleChildScrollView(
               child: StreamBuilder<QuerySnapshot>(
                 stream: Firestore.instance
                     .collection("films")
@@ -75,10 +73,6 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
                     case ConnectionState.waiting:
                       return new Text('Loading...');
                     default:
-                      // int userDernierFilm =
-                      // int.parse(getDataFromCollection('Users', currentUserUid, 'dernierFilm'));
-                      // attendre();
-                      // print('TEST INDEX $userDernierFilm');
                       return new IndexedStack(
                         index: indexFilm,
                         children: listMovieCard = snapshot.data.documents
@@ -87,13 +81,13 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
                           return new MovieCard(
                             film: filmActuel= Film(
                               idFilm: int.parse(document.documentID),
-                              titreFilm: document.data["titre"],
+                              titreFilm: document.data["titre_film"],
                               synopsis: document.data["synopsis"],
                               imageFilm: document.data["image_film"],
                               realisateur: document.data["realisateur"],
-                              typeFilm: document.data["type_Film"],
+                              typeFilm: document.data["type_film"],
                               casting: document.data["casting"],
-                              anneeSortie: document.data["annee_sortie_film"],
+                              anneeSortie: document.data["annee_sortie"],
                               rating: document.data["rating"],
                               duree: document.data["duree"],
                             ),
@@ -140,6 +134,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
         attendre();
         indexFilm += 1;
         setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
+        setDislike(indexFilm);
         break;
       case 1:
         print('Case 2 ');
@@ -153,6 +148,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
         attendre();
         indexFilm += 1;
         setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
+        setLike(indexFilm);
         break;
     }
   }
@@ -167,10 +163,11 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
   String getDataFromCollection(String collection, String idUser, String nomChamp) {
     Firestore.instance.collection(collection).document(idUser)
         .get().then((documentSnapshot) {
-        print(documentSnapshot.data);
-        attendre();
-        return (documentSnapshot.data[nomChamp].toString());
-      }
+      attendre();
+      print(documentSnapshot.data);
+      return documentSnapshot.data[nomChamp].toString(); // (Remplacer par un return)
+
+    }
     );
   }
 
@@ -179,8 +176,27 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
         {'dernierFilm': indexUpdate});
   }
 
-  void attendre() async {
-    await Future.delayed(const Duration(milliseconds: 1000), (){});//Pause pendant 300 milisecondes pour attendre le currentUserId
+  void setLike(int idFilm) async {
+    String regarderId = currentUserUid + idFilm.toString();
+    Firestore.instance.collection('regarder').document(regarderId).setData({
+          'aimer': 1,
+          'id_movie': idFilm,
+          'id_util': currentUserUid,
+        });
   }
+
+  void setDislike(int idFilm) async {
+    String regarderId = currentUserUid + idFilm.toString();
+    Firestore.instance.collection('regarder').document(regarderId).setData({
+      'aimer': 2,
+      'id_movie': idFilm,
+      'id_util': currentUserUid,
+    });
+  }
+
+  void attendre() async {
+    await Future.delayed(const Duration(milliseconds: 300), (){});
+  }
+
 
 }

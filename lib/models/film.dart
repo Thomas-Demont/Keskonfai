@@ -11,9 +11,9 @@ class Film extends Donnees {
   String synopsis;
   String imageFilm;
   String realisateur;
-  int typeFilm;
+  String typeFilm;
   String casting;
-  Timestamp anneeSortie;
+  int anneeSortie;
   String rating;
   String duree;
 
