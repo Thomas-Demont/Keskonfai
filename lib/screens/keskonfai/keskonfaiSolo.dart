@@ -3,13 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:testfirebase/screens/home/settings_form.dart';
 import 'package:testfirebase/screens/keskonfai/keskonfaiSoloFilm.dart';
 import 'package:testfirebase/services/auth.dart';
-import 'package:testfirebase/services/auth.dart';
 import 'package:testfirebase/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:testfirebase/screens/home/user_list.dart';
 import 'package:testfirebase/models/user.dart';
-import 'package:testfirebase/screens/home/settings_form.dart';
-import 'package:testfirebase/screens/keskonfai/keskonfaiSolo.dart';
 
 class KeskonfaiSolo extends StatelessWidget {
 

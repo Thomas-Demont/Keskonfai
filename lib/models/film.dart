@@ -20,21 +20,4 @@ class Film extends Donnees {
   Film({this.idFilm, this.titreFilm, this.synopsis, this.imageFilm, this.realisateur, this.typeFilm, this.casting,
   this.anneeSortie, this.rating, this.duree});
 
-  //Methodes
-  // Widget recupererFilms(AuthService user) {
-  //   CollectionReference users = Firestore.instance.collection('users');
-  //   (currentUser) => Firestore.instance
-  //       .collection("users")
-  //       .document(currentUser.user.uid).get();
-  //   users.document(currentUser.user.uid)
-
-    //Prend les 10 premier films à partir du dernier (avec user.uid)
-    //et renvoi une liste avec ces films
-    // user.user.
-  //}
-
-//MovieCard afficherFilm() {
-//  creer MovieCard et la renvoi par rapport au attribut du films a recup dans BDD
-//
-//}
 }

@@ -4,13 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testfirebase/screens/home/settings_form.dart';
 import 'package:testfirebase/services/auth.dart';
-import 'package:testfirebase/services/auth.dart';
 import 'package:testfirebase/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:testfirebase/screens/home/user_list.dart';
 import 'package:testfirebase/models/user.dart';
-import 'package:testfirebase/screens/home/settings_form.dart';
-import 'package:testfirebase/screens/keskonfai/keskonfaiSolo.dart';
 import '../../models/film.dart';
 import '../../models/movie_card.dart';
 
@@ -24,7 +20,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
 
   final AuthService _auth = AuthService();
   final FirebaseAuth authentication = FirebaseAuth.instance;
-  int indexFilm = 0;
+  int indexFilm = 0;//int.parse(getDataFromCollection('Users', currentUserUid, 'dernierFilm'));
   int _indexBottomNavBar = 0;
   Film filmActuel;
   List<MovieCard> listMovieCard;
@@ -34,6 +30,7 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
 
   @override
   Widget build(BuildContext context) {
+    getCurrentUserUid();
     void _showSettingsPanel() {
       showModalBottomSheet(context: context, builder: (context) {
         return Container(
@@ -42,7 +39,6 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
         );
       });
     }
-
 
     return StreamProvider<List<User>>.value(
       value: DatabaseService().users,
@@ -79,6 +75,10 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
                     case ConnectionState.waiting:
                       return new Text('Loading...');
                     default:
+                      // int userDernierFilm =
+                      // int.parse(getDataFromCollection('Users', currentUserUid, 'dernierFilm'));
+                      // attendre();
+                      // print('TEST INDEX $userDernierFilm');
                       return new IndexedStack(
                         index: indexFilm,
                         children: listMovieCard = snapshot.data.documents
@@ -137,9 +137,9 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
       case 0: //TODO Passer le film en dislike
         print('Case 1 ');
         getCurrentUserUid();
-        await Future.delayed(const Duration(milliseconds: 300), (){});//Pause pendant 300milisecondes pour attendre le currentUserId
-        setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
+        attendre();
         indexFilm += 1;
+        setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
         break;
       case 1:
         print('Case 2 ');
@@ -150,33 +150,37 @@ class _KeskonfaiSoloFilmState extends State<KeskonfaiSoloFilm> {
       case 2: //TODO Passer le film en like
         print('Case 3 ');
         getCurrentUserUid();
-        await Future.delayed(const Duration(milliseconds: 300), (){});//Pause pendant 300milisecondes pour attendre le currentUserId
-        setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
+        attendre();
         indexFilm += 1;
+        setDernierFilm(listMovieCard[indexFilm].film.idFilm, indexFilm);
         break;
     }
   }
 
   Future<String> getCurrentUserUid() async {
     final FirebaseUser user = await authentication.currentUser();
-    print('getCurrentUserId() : $currentUserUid');
+    print('getCurrentUserId() : ${user.uid}');
+    attendre();
     return currentUserUid = user.uid;
   }
 
-  void getDataFromCollection(String collection, String idUser, String nomChamp) {
+  String getDataFromCollection(String collection, String idUser, String nomChamp) {
     Firestore.instance.collection(collection).document(idUser)
         .get().then((documentSnapshot) {
-      print('id getDataFromCollection : $idUser');
-      print(documentSnapshot.data);
-      print(documentSnapshot.data[nomChamp].toString()); // (Remplacer par un return)
-
-    }
+        print(documentSnapshot.data);
+        attendre();
+        return (documentSnapshot.data[nomChamp].toString());
+      }
     );
   }
 
   void setDernierFilm(int idFilm, int indexUpdate) async{
     Firestore.instance.collection('Users').document(currentUserUid).updateData(
         {'dernierFilm': indexUpdate});
+  }
+
+  void attendre() async {
+    await Future.delayed(const Duration(milliseconds: 1000), (){});//Pause pendant 300 milisecondes pour attendre le currentUserId
   }
 
 }

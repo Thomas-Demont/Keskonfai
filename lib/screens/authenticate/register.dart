@@ -15,8 +15,6 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final databaseReference = Firestore.instance;
 
-
-  //text field state
   String email = '';
   String passWord = '';
   String name ='';

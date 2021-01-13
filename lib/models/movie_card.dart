@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:testfirebase/models/film.dart';
-
 class MovieCard extends StatelessWidget {
   final Film film;
 
@@ -11,16 +10,18 @@ class MovieCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Text('id: ${film.idFilm}'),
           Text('Titre: ${film.titreFilm}'),
-          Text('synopsis: ${film.synopsis}'),
-          Text('imageFilm: ${film.imageFilm}'),
-          Text('realisateur: ${film.realisateur}'),
-          Text('typeFilm: ${film.typeFilm}'),
-          Text('casting: ${film.casting}'),
-          Text('anneeSortie: ${film.anneeSortie}'),
-          Text('rating: ${film.rating}'),
-          Text('duree: ${film.duree}'),
+          Image.network('${film.imageFilm}'),
+          // Image(image: FirebaseImage(film.imageFilm)),
+          // Text('id: ${film.idFilm}'),
+          // Text('synopsis: ${film.synopsis}'),
+          // Text('realisateur: ${film.realisateur}'),
+          // Text('typeFilm: ${film.typeFilm}'),
+          // Text('casting: ${film.casting}'),dis
+
+          // Text('anneeSortie: ${film.anneeSortie}'),
+          // Text('rating: ${film.rating}'),
+          // Text('duree: ${film.duree}'),
         ],
       ),
     );
